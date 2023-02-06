@@ -23,6 +23,7 @@ As this is a free time project hence I will set a timeline which will complete t
   - K9s (cli for kubernetes cluster)
   - Git bash/Cmder
   - Git
+  - Minikube
 
 - Tech Stack
   - Spring framework (Backend architecture)
@@ -32,4 +33,8 @@ As this is a free time project hence I will set a timeline which will complete t
   - Docker (Containerized technology)
   - AWS(free account)
   - MySQL (currently will just store document history) //TBD
+
+
+
+
 
