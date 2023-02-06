@@ -1,0 +1,13 @@
+---
+project: backend
+desc: |-
+  task to check ktlint
+  task to ktlint format
+  task to build gradle 
+tasks:
+  ktlint:
+    cmd: ./gradlew ktlintCheck
+  format:
+    cmd: ./gradlew ktlintFormat
+  build:
+    cmd: ./gradlew build
