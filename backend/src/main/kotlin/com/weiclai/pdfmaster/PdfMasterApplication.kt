@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class PdfMasterApplication
 
 fun main(args: Array<String>) {
-	runApplication<PdfMasterApplication>(*args)
+    runApplication<PdfMasterApplication>(*args)
 }
