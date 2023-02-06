@@ -25,6 +25,7 @@ As this is a free time project hence I will set a timeline which will complete t
   - Git
 
 - Tech Stack
+  - Spring framework (Backend architecture)
   - Kotlin (Backend)
   - React (Frontend)
   - Kubernetes (manage containerized application)
