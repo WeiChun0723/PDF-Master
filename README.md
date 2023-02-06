@@ -24,6 +24,8 @@ As this is a free time project hence I will set a timeline which will complete t
   - Git bash/Cmder
   - Git
   - Minikube
+  - Myke Task Runner (Good to have)
+  - Transcrypt (Good to have)
 
 - Tech Stack
   - Spring framework (Backend architecture)
