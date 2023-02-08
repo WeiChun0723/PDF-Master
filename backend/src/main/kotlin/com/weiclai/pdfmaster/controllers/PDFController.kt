@@ -45,8 +45,8 @@ class PDFController {
         document.open()
         for (file in files) {
             val pdfReader = PdfReader(file.inputStream)
-            for (page in 0 until pdfReader.numberOfPages) {
-                val importedPage = writer.getImportedPage(pdfReader, page + 1)
+            for (page in 1 .. pdfReader.numberOfPages) {
+                val importedPage = writer.getImportedPage(pdfReader, page)
                 writer.addPage(importedPage)
             }
         }
