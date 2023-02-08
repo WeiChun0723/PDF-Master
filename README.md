@@ -4,7 +4,7 @@ I am writing this proposal for a new PDF editor that will provide a safer enviro
 
 The core functionalities of the PDF editor will include:
 
-- [ ] Adding watermark: Users will be able to add watermark in their PDF file for any application such as loan, rental,and other government process.
+- [x] Adding watermark: Users will be able to add watermark in their PDF file for any application such as loan, rental,and other government process.
 - [ ] Editing Test: Users will  be able to make changes to text within the PDF file, including typos and changing the font sizes.
 - [ ] Merging of PDF: Users will be able to combine multiple PDFs into one single file.
 - [ ] Splitting of PDF: Users will be able to split a PDF file into multiple files.
