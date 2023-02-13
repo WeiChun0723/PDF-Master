@@ -12,6 +12,11 @@ import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.PdfStamper
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.apache.pdfbox.pdmodel.PDDocument
+import org.apache.pdfbox.rendering.ImageType
+import org.apache.pdfbox.rendering.PDFRenderer
+import org.apache.pdfbox.text.PDFTextStripper
+import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.springframework.core.io.ByteArrayResource
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
@@ -22,6 +27,10 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import java.io.ByteArrayOutputStream
+import java.util.zip.GZIPOutputStream
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+import javax.imageio.ImageIO
 
 @RestController
 @RequestMapping("/api/pdf")
@@ -110,5 +119,81 @@ class PDFController {
             .contentLength(resource.contentLength())
             .contentType(MediaType.APPLICATION_PDF)
             .body(resource)
+    }
+
+    @PostMapping("/convert", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
+    @Operation(
+        summary = "Convert pdf to Word document (DOCX) or image. The format will not be retain and will only show text.",
+        responses = [
+            ApiResponse(responseCode = "200", description = "Success"),
+            ApiResponse(responseCode = "500", description = "Not a file")
+        ]
+    )
+    fun convertPdf(
+        @RequestParam(value = "file", required = true) file: MultipartFile,
+        @RequestParam(value = "fileType", defaultValue = "DOCX") fileType : FileType
+    ): ResponseEntity<ByteArrayResource> {
+        return when(fileType) {
+            FileType.DOCX -> convertToWordDocument(file)
+            FileType.PNG -> convertToPNG(file)
+        }
+    }
+
+    fun convertToPNG(file: MultipartFile): ResponseEntity<ByteArrayResource> {
+        val pdf = PDDocument.load(file.inputStream)
+        val renderer = PDFRenderer(pdf)
+
+        val images = mutableListOf<ByteArray>()
+        for (page in 0 until pdf.numberOfPages) {
+            val image = renderer.renderImageWithDPI(page, 300f, ImageType.RGB)
+            val outputStream = ByteArrayOutputStream()
+            ImageIO.write(image, "png", outputStream)
+            images.add(outputStream.toByteArray())
+        }
+
+        val zipFile = ByteArrayOutputStream()
+        GZIPOutputStream(zipFile).use { gzipOut ->
+            ZipOutputStream(gzipOut).use { zipOut ->
+                for ((index, image) in images.withIndex()) {
+                    val entry = ZipEntry("image-$index.png")
+                    zipOut.putNextEntry(entry)
+                    zipOut.write(image)
+                    zipOut.closeEntry()
+                }
+            }
+        }
+
+        pdf.close()
+        val resource = ByteArrayResource(zipFile.toByteArray())
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=images.gz")
+            .header(HttpHeaders.CONTENT_ENCODING, "gzip")
+            .contentLength(resource.contentLength())
+            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+            .body(resource)
+    }
+
+    fun convertToWordDocument(file: MultipartFile): ResponseEntity<ByteArrayResource> {
+        val pdfTextStripper = PDFTextStripper()
+        PDDocument.load(file.inputStream).use { document ->
+            val text = pdfTextStripper.getText(document)
+            XWPFDocument().use { wordDocument ->
+                val paragraph = wordDocument.createParagraph()
+                paragraph.createRun().setText(text)
+                ByteArrayOutputStream().use {
+                    wordDocument.write(it)
+                    val resource = ByteArrayResource(it.toByteArray())
+                    return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=word.docx")
+                        .contentLength(resource.contentLength())
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .body(resource)
+                }
+            }
+        }
+    }
+
+    enum class FileType {
+        DOCX, PNG
     }
 }
