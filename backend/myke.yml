@@ -10,4 +10,10 @@ tasks:
   format:
     cmd: ./gradlew ktlintFormat
   build:
-    cmd: ./gradlew build
+    cmd:
+      ./gradlew ktlintFormat |
+      ./gradlew build
+  deploy:
+    cmd:
+      kubectl apply -f deployment.yaml |
+      kubectl apply -f service.yaml

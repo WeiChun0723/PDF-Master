@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pdf-master
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pdf-master
+  template:
+    metadata:
+      labels:
+        app: pdf-master
+    spec:
+      containers:
+        - name: pdf-master
+          image: weichunlai/pdf-master
+          ports:
+            - containerPort: 8080
