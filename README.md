@@ -32,7 +32,7 @@ As this is a free time project hence I will set a timeline which will complete t
   - React (Frontend)
   - Kubernetes (manage containerized application)
   - Docker (Containerized technology)
-  - AWS(free account)
+  - AWS(free account) *deprecated due to cost
   - MySQL (currently will just store document history) //TBD
 
 
