@@ -131,9 +131,9 @@ class PDFController {
     )
     fun convertPdf(
         @RequestParam(value = "file", required = true) file: MultipartFile,
-        @RequestParam(value = "fileType", defaultValue = "DOCX") fileType : FileType
+        @RequestParam(value = "fileType", defaultValue = "DOCX") fileType: FileType
     ): ResponseEntity<ByteArrayResource> {
-        return when(fileType) {
+        return when (fileType) {
             FileType.DOCX -> convertToWordDocument(file)
             FileType.PNG -> convertToPNG(file)
         }

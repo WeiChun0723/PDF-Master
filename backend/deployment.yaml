@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: pdf-master
-          image: weichunlai/pdf-master
+          image: weichunlai/pdf-master:latest
           ports:
             - containerPort: 8080

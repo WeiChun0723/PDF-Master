@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: pdf-master-service
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - port: 8080
-      nodePort: 32000
       targetPort: 8080
   selector:
     app: pdf-master

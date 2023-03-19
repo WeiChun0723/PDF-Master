@@ -13,7 +13,13 @@ tasks:
     cmd:
       ./gradlew ktlintFormat |
       ./gradlew build
+  develop:
+    cmd:
+      ./gradlew ktlintFormat |
+      ./gradlew build |
+      docker build -t weichunlai/pdf-master .
   deploy:
     cmd:
       kubectl apply -f deployment.yaml |
-      kubectl apply -f service.yaml
+      kubectl apply -f service.yaml |
+      kubectl apply -f ingress.yaml
