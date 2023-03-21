@@ -1,4 +1,4 @@
-**Day 8 Log**
+**Day 9 Log**
 - add ingress and change service type from nodePort to ClusterIp for better protection.
 - able to route traffic from ingress to the pod and tested all functionality.
 
