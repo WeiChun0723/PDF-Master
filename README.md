@@ -34,6 +34,9 @@ As this is a free time project hence I will set a timeline which will complete t
 **Run application using docker image**
 - ```docker run weichunlai/pdf-master```
 
+**Deploy docker image in local kubernetes cluster (minikube)**
+- ```myke deploy```
+
 
 
 
