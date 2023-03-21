@@ -30,6 +30,7 @@ As this is a free time project hence I will set a timeline which will complete t
   - Kotlin (Backend)
   - Kubernetes (manage containerized application)
   - Docker (Containerized technology)
+  - Swagger (API documentation)
 
 **Run application using docker image**
 - ```docker run weichunlai/pdf-master```
