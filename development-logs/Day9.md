@@ -3,4 +3,4 @@
 - able to route traffic from ingress to the pod and tested all functionality.
 
 **ToDo Next**
-- find alternative way to host application
+- mark as done at the moment and come back when have new idea
