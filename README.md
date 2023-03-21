@@ -24,16 +24,15 @@ As this is a free time project hence I will set a timeline which will complete t
   - Git
   - Minikube
   - Myke Task Runner (Good to have)
-  - Transcrypt (Good to have)
 
 - Tech Stack
   - Spring framework (Backend architecture)
   - Kotlin (Backend)
-  - React (Frontend)
   - Kubernetes (manage containerized application)
   - Docker (Containerized technology)
-  - AWS(free account) *deprecated due to cost
-  - MySQL (currently will just store document history) //TBD
+
+**Run application using docker image**
+- ```docker run weichunlai/pdf-master```
 
 
 
