@@ -35,26 +35,29 @@ import javax.imageio.ImageIO
 @RestController
 @RequestMapping("/api/pdf")
 class PDFController {
-
     @PostMapping("/upload", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @Operation(
         summary = "Upload pdf file",
         responses = [
             ApiResponse(responseCode = "200", description = "Success"),
-            ApiResponse(responseCode = "500", description = "Not a file")
-        ]
+            ApiResponse(responseCode = "500", description = "Not a file"),
+        ],
     )
-    fun uploadPdf(@RequestParam(value = "files", required = true) file: MultipartFile) = "The file name ${file.originalFilename}, size ${file.size} uploaded successfully."
+    fun uploadPdf(
+        @RequestParam(value = "files", required = true) file: MultipartFile,
+    ) = "The file name ${file.originalFilename}, size ${file.size} uploaded successfully."
 
     @PostMapping("/combine", consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
     @Operation(
         summary = "Upload pdf files to combine",
         responses = [
             ApiResponse(responseCode = "200", description = "Success"),
-            ApiResponse(responseCode = "500", description = "Not a file")
-        ]
+            ApiResponse(responseCode = "500", description = "Not a file"),
+        ],
     )
-    fun combinePdf(@RequestParam(value = "files", required = true) files: List<MultipartFile>): ResponseEntity<ByteArrayResource> {
+    fun combinePdf(
+        @RequestParam(value = "files", required = true) files: List<MultipartFile>,
+    ): ResponseEntity<ByteArrayResource> {
         val outputStream = ByteArrayOutputStream()
         val document = Document()
         val writer = PdfCopy(document, outputStream)
@@ -68,7 +71,8 @@ class PDFController {
         }
         document.close()
         val resource = ByteArrayResource(outputStream.toByteArray())
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=combined.pdf")
             .contentLength(resource.contentLength())
             .contentType(MediaType.APPLICATION_PDF)
@@ -80,14 +84,14 @@ class PDFController {
         summary = "Add water mark to pdf",
         responses = [
             ApiResponse(responseCode = "200", description = "Success"),
-            ApiResponse(responseCode = "500", description = "Not a file")
-        ]
+            ApiResponse(responseCode = "500", description = "Not a file"),
+        ],
     )
     fun addWaterMark(
         @RequestParam(value = "file", required = true) file: MultipartFile,
         @RequestParam(value = "watermarkText", defaultValue = "Testing") watermarkText: String = "Testing",
         @RequestParam(value = "fontSize", defaultValue = "45f") fontSize: Float = 45f,
-        @RequestParam(value = "rotation", defaultValue = "45f") rotation: Float = 45f
+        @RequestParam(value = "rotation", defaultValue = "45f") rotation: Float = 45f,
     ): ResponseEntity<ByteArrayResource> {
         val reader = PdfReader(file.inputStream)
         val outputStream = ByteArrayOutputStream()
@@ -114,7 +118,8 @@ class PDFController {
         stamper.close()
         reader.close()
         val resource = ByteArrayResource(outputStream.toByteArray())
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=watermarked.pdf")
             .contentLength(resource.contentLength())
             .contentType(MediaType.APPLICATION_PDF)
@@ -126,18 +131,17 @@ class PDFController {
         summary = "Convert pdf to Word document (DOCX) or image. The format will not be retain and will only show text.",
         responses = [
             ApiResponse(responseCode = "200", description = "Success"),
-            ApiResponse(responseCode = "500", description = "Not a file")
-        ]
+            ApiResponse(responseCode = "500", description = "Not a file"),
+        ],
     )
     fun convertPdf(
         @RequestParam(value = "file", required = true) file: MultipartFile,
-        @RequestParam(value = "fileType", defaultValue = "DOCX") fileType: FileType
-    ): ResponseEntity<ByteArrayResource> {
-        return when (fileType) {
+        @RequestParam(value = "fileType", defaultValue = "DOCX") fileType: FileType,
+    ): ResponseEntity<ByteArrayResource> =
+        when (fileType) {
             FileType.DOCX -> convertToWordDocument(file)
             FileType.PNG -> convertToPNG(file)
         }
-    }
 
     fun convertToPNG(file: MultipartFile): ResponseEntity<ByteArrayResource> {
         val pdf = PDDocument.load(file.inputStream)
@@ -165,7 +169,8 @@ class PDFController {
 
         pdf.close()
         val resource = ByteArrayResource(zipFile.toByteArray())
-        return ResponseEntity.ok()
+        return ResponseEntity
+            .ok()
             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=images.gz")
             .header(HttpHeaders.CONTENT_ENCODING, "gzip")
             .contentLength(resource.contentLength())
@@ -183,7 +188,8 @@ class PDFController {
                 ByteArrayOutputStream().use {
                     wordDocument.write(it)
                     val resource = ByteArrayResource(it.toByteArray())
-                    return ResponseEntity.ok()
+                    return ResponseEntity
+                        .ok()
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=word.docx")
                         .contentLength(resource.contentLength())
                         .contentType(MediaType.APPLICATION_PDF)
@@ -194,6 +200,7 @@ class PDFController {
     }
 
     enum class FileType {
-        DOCX, PNG
+        DOCX,
+        PNG,
     }
 }
