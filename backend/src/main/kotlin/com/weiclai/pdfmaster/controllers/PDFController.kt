@@ -93,6 +93,7 @@ class PDFController {
         @RequestParam(value = "fontSize", defaultValue = "45f") fontSize: Float = 45f,
         @RequestParam(value = "rotation", defaultValue = "45f") rotation: Float = 45f,
     ): ResponseEntity<ByteArrayResource> {
+        println("Adding water mark to pdf")
         val reader = PdfReader(file.inputStream)
         val outputStream = ByteArrayOutputStream()
         val stamper = PdfStamper(reader, outputStream)
