@@ -12,6 +12,7 @@ import com.itextpdf.text.pdf.PdfReader
 import com.itextpdf.text.pdf.PdfStamper
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import org.apache.pdfbox.Loader
 import org.apache.pdfbox.pdmodel.PDDocument
 import org.apache.pdfbox.rendering.ImageType
 import org.apache.pdfbox.rendering.PDFRenderer
@@ -144,7 +145,7 @@ class PDFController {
         }
 
     fun convertToPNG(file: MultipartFile): ResponseEntity<ByteArrayResource> {
-        val pdf = PDDocument.load(file.inputStream)
+        val pdf = Loader.loadPDF(file.bytes)
         val renderer = PDFRenderer(pdf)
 
         val images = mutableListOf<ByteArray>()
@@ -180,7 +181,7 @@ class PDFController {
 
     fun convertToWordDocument(file: MultipartFile): ResponseEntity<ByteArrayResource> {
         val pdfTextStripper = PDFTextStripper()
-        PDDocument.load(file.inputStream).use { document ->
+        Loader.loadPDF(file.bytes).use { document ->
             val text = pdfTextStripper.getText(document)
             XWPFDocument().use { wordDocument ->
                 val paragraph = wordDocument.createParagraph()
